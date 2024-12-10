@@ -139,6 +139,45 @@ idx = columnas.index('Digitador') + 1
 columnas.insert(idx, columnas.pop(columnas.index('Nombre_D')))
 df_col_dig = df[columnas]
 """****************************************************************************
+FILTRO DE EDADE (1- 4 AÑOS) Y PRESTACIONES (1,2,7,8,16,19,61,75)
+****************************************************************************"""
+# Filtrar Pacientes con edad 0 to 4 años
+def filtrar_por_Edad(df, ids):
+    df_filtrado = df[df['Edad'].isin(ids)]
+    return df_filtrado
+# Crear un DataFrame de ejemplo
+df = pd.DataFrame(df_col_dig)
+
+# Lista de IDs para filtrar
+ids_a_filtrar = [0, 1, 2, 3, 4]
+
+# Usar la función para filtrar el DataFrame
+df_filtrado = filtrar_por_Edad(df, ids_a_filtrar)
+
+# Imprimir el DataFrame resultante
+print('DataFrame filtrado por Edades específicos:')
+# print(df_filtrado)
+
+#Filtrar por prestaciones 001, 002, 007, 008, 016, 019, 061, 075
+def filtrar_por_ids(df, nombres):
+    df_filtrado_1 = df[df['ID Servicio'].isin(nombres)]
+    return df_filtrado_1
+
+# Crear un DataFrame de ejemplo
+df = pd.DataFrame(df_filtrado)
+
+# Lista de nombres para filtrar
+ids_a_filtrar = [1,2,7,8,16,19,61,75]
+
+# Usar la función para filtrar el DataFrame
+df_filtrado_1 = filtrar_por_ids(df, ids_a_filtrar)
+
+# Columnas personalidas
+col_personal = ['?FUA', 'Fecha Atencion', 'EESS', 'Beneficiario', 'Num. Doc.', 'Fec. Nac', 'Edad',
+                'Edad Paciente', 'Sexo', 'ID Servicio', 'Digitador', 'Nombre_D', 'Profesional', 
+                'Tipo Profesional', 'Fecha Registro', 'Nro. Cred']
+df_personalizada = df_filtrado_1[col_personal]
+"""****************************************************************************
 GUARDAR EL DATAFRAME EN FORMATO CSV
 ****************************************************************************"""
 # Guardar el DataFrame en un archivo CSV 
@@ -150,7 +189,7 @@ def guardar_como_csv(dataframe, archivo_salida):
         print(f"Se produjo un error al guardar el archivo: {e}")
 
 # Uso de la función
-dataframe = pd.DataFrame(df_col_dig)
+dataframe = pd.DataFrame(df_personalizada)
 
 # Guardar el DataFrame como un nuevo archivo CSV
 if dataframe is not None:
