@@ -139,6 +139,37 @@ idx = columnas.index('Digitador') + 1
 columnas.insert(idx, columnas.pop(columnas.index('Nombre_D')))
 df_col_dig = df[columnas]
 """****************************************************************************
+FILTRO DE PRESTACIONES (009, 010, 011) Y POR NOMBRE
+****************************************************************************"""
+def filtrar_por_ids_y_nombres(df, ids):
+    # Paso 1: Filtrar los registros con los IDs especificados
+    df_filtrado_ids = df[df['ID Servicio'].isin(ids)]
+
+    # Obtener la lista de nombres únicos de la primera filtración
+    nombres_a_filtrar = df_filtrado_ids['Beneficiario'].unique()
+
+    # Paso 2: Usar los nombres obtenidos para filtrar nuevamente el DataFrame inicial
+    df_filtrado_nombres = df[df['Beneficiario'].isin(nombres_a_filtrar)]
+    
+    return df_filtrado_nombres
+
+# Crear el DataFrame de ejemplo
+df = pd.DataFrame(df_col_dig)
+
+# Lista de IDs para filtrar
+ids_a_filtrar = [9, 10, 11]
+
+# Usar la función para filtrar el DataFrame
+df_resultante = filtrar_por_ids_y_nombres(df, ids_a_filtrar)
+
+# Imprimir el DataFrame resultante
+print('DataFrame filtrado por nombres obtenidos de los IDs 9, 10 y 11:')
+# Imprimir el DataFrame resultante
+print('DataFrame completo:')
+# Columnas personalidas
+col_personal = ['?FUA', 'Fecha Atencion', 'EESS', 'Beneficiario', 'Num. Doc.', 'Fec. Nac', 'Edad','ID Servicio',' Servicio', 'Digitador', 'Nombre_D','Profesional', 'Tipo Profesional', 'Fecha Registro', 'Gestante', 'Fecha Probable Parto', 'Fecha Parto']
+df_personalizada = df_resultante[col_personal]
+"""****************************************************************************
 GUARDAR EL DATAFRAME EN FORMATO CSV
 ****************************************************************************"""
 # Guardar el DataFrame en un archivo CSV 
@@ -150,7 +181,7 @@ def guardar_como_csv(dataframe, archivo_salida):
         print(f"Se produjo un error al guardar el archivo: {e}")
 
 # Uso de la función
-dataframe = pd.DataFrame(df_col_dig)
+dataframe = pd.DataFrame(df_personalizada)
 
 # Guardar el DataFrame como un nuevo archivo CSV
 if dataframe is not None:
