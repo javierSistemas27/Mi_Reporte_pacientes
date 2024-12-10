@@ -167,7 +167,10 @@ print('DataFrame filtrado por nombres obtenidos de los IDs 9, 10 y 11:')
 # Imprimir el DataFrame resultante
 print('DataFrame completo:')
 # Columnas personalidas
-col_personal = ['?FUA', 'Fecha Atencion', 'EESS', 'Beneficiario', 'Num. Doc.', 'Fec. Nac', 'Edad','ID Servicio',' Servicio', 'Digitador', 'Nombre_D','Profesional', 'Tipo Profesional', 'Fecha Registro', 'Gestante', 'Fecha Probable Parto', 'Fecha Parto']
+col_personal = ['?FUA', 'Fecha Atencion', 'EESS', 'Beneficiario', 'Num. Doc.',
+                'Fec. Nac', 'Edad','ID Servicio',' Servicio', 'Digitador', 
+                'Nombre_D','Profesional', 'Tipo Profesional', 'Fecha Registro', 
+                'Gestante', 'Fecha Probable Parto', 'Fecha Parto']
 df_personalizada = df_resultante[col_personal]
 """****************************************************************************
 GUARDAR EL DATAFRAME EN FORMATO CSV
