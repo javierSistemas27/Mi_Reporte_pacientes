@@ -117,13 +117,30 @@ df_col_delete_final = seleccionar_columnas(df, columnas_personalizadas)
 
 # Uso de la función para extraer los nombres de las columnas
 nombres_columnas = extraer_columnas(df_col_delete_final)
-
-# Imprimir el DataFrame resultante y los nombres de las columnas
-# print('DataFrame con columnas seleccionadas y sin duplicados:')
-# print(df_col_delete_final)
-# print('Nombres de las columnas:', nombres_columnas)
-
-
+"""****************************************************************************
+AGREGAR LA COLUMNA "NOMBRE_D" DONDE SE ALMACENA EL NOMBRE DIGITADOR DF=df_col_delete_final
+****************************************************************************"""
+# Crear un DataFrame de ejemplo
+df = pd.DataFrame(df_col_delete_final)
+# Crear un diccionario con los identificadores y los nombres de los creadores
+creadores = {
+    70038401: 'JAVIER',
+    75101750: 'DANITZA',
+    70609648: 'MAYRA'
+}
+# Definir una función para mapear los identificadores a los nombres de los creadores
+def agregar_nombre_creador(row):
+    return creadores.get(row['Digitador'], 'Desconocido')  # Devuelve 'Desconocido' si no encuentra el ID
+# Agregar una nueva columna 'Creador' al DataFrame
+df['Nombre_D'] = df.apply(agregar_nombre_creador, axis=1)
+# Reordenar las columnas para colocar 'Creador' después de 'Registro'
+columnas = df.columns.tolist()
+idx = columnas.index('Digitador') + 1
+columnas.insert(idx, columnas.pop(columnas.index('Nombre_D')))
+df_col_dig = df[columnas]
+"""****************************************************************************
+GUARDAR EL DATAFRAME EN FORMATO CSV
+****************************************************************************"""
 # Guardar el DataFrame en un archivo CSV 
 def guardar_como_csv(dataframe, archivo_salida):
     try:
@@ -133,7 +150,7 @@ def guardar_como_csv(dataframe, archivo_salida):
         print(f"Se produjo un error al guardar el archivo: {e}")
 
 # Uso de la función
-dataframe = pd.DataFrame(df_col_delete_final)
+dataframe = pd.DataFrame(df_col_dig)
 
 # Guardar el DataFrame como un nuevo archivo CSV
 if dataframe is not None:
