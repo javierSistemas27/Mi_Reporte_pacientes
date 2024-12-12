@@ -1,20 +1,27 @@
 import pandas as pd
-"""
+"""****************************************************************************
 SELECCIONAR COLUMNAS PARA MI ANALISIS
-"""
+****************************************************************************"""
 def seleccionar_columnas(df, columnas):
     df_seleccionado = df[columnas]
     return df_seleccionado
 
-columnas_personalizadas = ['?FUA', 'Fecha Atencion', 'EESS', 'Tipo Doc.', 'Num. Doc.', 'Ap. Paterno', 'Ap. Materno', 'Primer Nombre', 'Otros Nombres', 'Fec. Nac', 'Edad', 'Sexo', 'ID Servicio', ' Servicio', 'Digitador', 'DNI Resp. Aten.', 'Profesional', 'Tipo Profesional', 'Fecha Registro', 'Hora Registro', 'Lugar Atencion', 'Destino Asegurado','Gestante', 'Nro. Cred', 'Fecha Probable Parto', 'Fecha Parto']
+columnas_personalizadas = ['?FUA', 'Fecha Atencion', 'EESS', 'Tipo Doc.', 'Num. Doc.', 'Ap. Paterno', 
+                        'Ap. Materno', 'Primer Nombre', 'Otros Nombres', 'Fec. Nac', 'Edad', 'Sexo',
+                        'ID Servicio', ' Servicio', 'Digitador', 'DNI Resp. Aten.', 'Profesional', 
+                        'Tipo Profesional', 'Fecha Registro', 'Hora Registro', 'Lugar Atencion',
+                        'Destino Asegurado','Gestante', 'Nro. Cred', 'Fecha Probable Parto', 'Fecha Parto']
 file_path = 'atenciones_guardado.csv'
 df = pd.read_csv(file_path)
 df_seleccionado = seleccionar_columnas(df, columnas_personalizadas)
 
-"""
+"""****************************************************************************
 CONCATENAR COLUMNAS
-"""
+****************************************************************************"""
 def concatenar_y_excluir(df, paterno, materno, primer_nombre, segundo_nombre, nueva_columna, separador=' '):
+    # Reemplazar NaN con cadena vacía
+    df[[paterno, materno, primer_nombre, segundo_nombre]] = df[[paterno, materno, primer_nombre, segundo_nombre]].fillna('')
+    
     # Concatenar las columnas especificadas en la nueva columna
     df[nueva_columna] = df[[paterno, materno, primer_nombre, segundo_nombre]].apply(lambda row: separador.join(row.values.astype(str)), axis=1)
     
@@ -29,7 +36,7 @@ def concatenar_y_excluir(df, paterno, materno, primer_nombre, segundo_nombre, nu
     
     return df_resultante
 
-# Crear DataFrame de ejemplo (aquí df_seleccionado debería ser tu DataFrame ya preseleccionado)
+# Crear DataFrame de ejemplo
 df = pd.DataFrame(df_seleccionado)
 
 paterno = 'Ap. Paterno'
@@ -48,13 +55,17 @@ def seleccionar_columnas(df, columnas):
     df_seleccionado = df[columnas]
     return df_seleccionado
 
-columnas_personalizadas = ['?FUA', 'Fecha Atencion', 'EESS', 'Tipo Doc.', 'Beneficiario', 'Num. Doc.', 'Fec. Nac', 'Edad', 'Sexo', 'ID Servicio', ' Servicio', 'Digitador', 'DNI Resp. Aten.', 'Profesional', 'Tipo Profesional', 'Fecha Registro', 'Hora Registro', 'Lugar Atencion', 'Destino Asegurado', 'Gestante', 'Nro. Cred', 'Fecha Probable Parto', 'Fecha Parto']
+columnas_personalizadas = ['?FUA', 'Fecha Atencion', 'EESS', 'Tipo Doc.', 'Beneficiario', 'Num. Doc.',
+                            'Fec. Nac', 'Edad', 'Sexo', 'ID Servicio', ' Servicio', 'Digitador', 
+                            'DNI Resp. Aten.', 'Profesional', 'Tipo Profesional', 'Fecha Registro', 
+                            'Hora Registro', 'Lugar Atencion', 'Destino Asegurado', 'Gestante', 
+                            'Nro. Cred', 'Fecha Probable Parto', 'Fecha Parto']
 df = pd.DataFrame(df_concatenado)
 df_col_delete = seleccionar_columnas(df, columnas_personalizadas)
 
-"""
+"""****************************************************************************
 CALCULAR EDAD DEL PACIENTE AÑOS MESES Y DIAS
-"""
+****************************************************************************"""
 from datetime import datetime
 
 def calcular_edad(fecha_nac, fecha_atencion):
@@ -82,17 +93,21 @@ def agregar_columna_edad(df, col_fecha_nac, col_fecha_atencion, col_edad):
 # Crear el DataFrame
 df = pd.DataFrame(df_col_delete)
 
-# Agregar la columna de edad
+# Agregar la columna Edad Paciente
 df_cal_edad = agregar_columna_edad(df, 'Fec. Nac', 'Fecha Atencion', 'Edad Paciente')
 
 # Reordenar las columnas para colocar 'Edad_personal' junto a 'Edad'
-columnas_ordenadas = ['?FUA', 'Fecha Atencion', 'EESS', 'Tipo Doc.', 'Beneficiario', 'Num. Doc.', 'Fec. Nac', 'Edad', 'Edad Paciente','Sexo', 'ID Servicio', ' Servicio', 'Digitador', 'DNI Resp. Aten.', 'Profesional', 'Tipo Profesional', 'Fecha Registro', 'Hora Registro', 'Lugar Atencion', 'Destino Asegurado', 'Gestante', 'Nro. Cred', 'Fecha Probable Parto', 'Fecha Parto']
+columnas_ordenadas = ['?FUA', 'Fecha Atencion', 'EESS', 'Tipo Doc.', 'Beneficiario', 
+                    'Num. Doc.', 'Fec. Nac', 'Edad', 'Edad Paciente','Sexo', 'ID Servicio', 
+                    ' Servicio', 'Digitador', 'DNI Resp. Aten.', 'Profesional', 'Tipo Profesional', 
+                    'Fecha Registro', 'Hora Registro', 'Lugar Atencion', 'Destino Asegurado', 
+                    'Gestante', 'Nro. Cred', 'Fecha Probable Parto', 'Fecha Parto']
 
 df_cal_edad_final = df[columnas_ordenadas]
 # print(df_cal_edad_final)
-"""
+"""****************************************************************************
 ELIMINAR COLUMNA DUPLICADA
-"""
+****************************************************************************"""
 def seleccionar_columnas(df, columnas):
     # Verificar y seleccionar solo columnas existentes
     columnas_existentes = [col for col in columnas if col in df.columns]
@@ -107,16 +122,21 @@ def extraer_columnas(df):
     columnas = df.columns.tolist()
     return columnas
 
-columnas_personalizadas = ['?FUA', 'Fecha Atencion', 'EESS', 'Tipo Doc.', 'Beneficiario', 'Num. Doc.', 'Fec. Nac', 'Edad', 'Edad Paciente','Sexo', 'ID Servicio', ' Servicio', 'Digitador', 'DNI Resp. Aten.', 'Profesional', 'Tipo Profesional', 'Fecha Registro', 'Hora Registro', 'Lugar Atencion', 'Destino Asegurado', 'Gestante', 'Nro. Cred', 'Fecha Probable Parto', 'Fecha Parto']
+columnas_personalizadas = ['?FUA', 'Fecha Atencion', 'EESS', 'Tipo Doc.', 'Beneficiario', 'Num. Doc.', 
+                        'Fec. Nac', 'Edad', 'Edad Paciente','Sexo', 'ID Servicio', ' Servicio', 
+                        'Digitador', 'DNI Resp. Aten.', 'Profesional', 'Tipo Profesional', 
+                        'Fecha Registro', 'Hora Registro', 'Lugar Atencion', 
+                        'Destino Asegurado', 'Gestante', 'Nro. Cred', 'Fecha Probable Parto', 'Fecha Parto']
 
 # Supongo que df_concatenado es un DataFrame ya existente
-df = pd.DataFrame(df_concatenado)
+df = pd.DataFrame(df_cal_edad_final)
 
 # Seleccionar columnas existentes y eliminar duplicados
 df_col_delete_final = seleccionar_columnas(df, columnas_personalizadas)
 
 # Uso de la función para extraer los nombres de las columnas
 nombres_columnas = extraer_columnas(df_col_delete_final)
+
 """****************************************************************************
 AGREGAR LA COLUMNA "NOMBRE_D" DONDE SE ALMACENA EL NOMBRE DIGITADOR DF=df_col_delete_final
 ****************************************************************************"""
