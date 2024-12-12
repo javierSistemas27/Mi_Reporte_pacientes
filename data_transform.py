@@ -14,7 +14,6 @@ columnas_personalizadas = ['?FUA', 'Fecha Atencion', 'EESS', 'Tipo Doc.', 'Num. 
 file_path = 'atenciones_guardado.csv'
 df = pd.read_csv(file_path)
 df_seleccionado = seleccionar_columnas(df, columnas_personalizadas)
-
 """****************************************************************************
 CONCATENAR COLUMNAS
 ****************************************************************************"""
