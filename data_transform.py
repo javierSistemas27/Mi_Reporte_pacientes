@@ -14,6 +14,7 @@ columnas_personalizadas = ['?FUA', 'Fecha Atencion', 'EESS', 'Tipo Doc.', 'Num. 
 file_path = 'atenciones_guardado.csv'
 df = pd.read_csv(file_path)
 df_seleccionado = seleccionar_columnas(df, columnas_personalizadas)
+
 """****************************************************************************
 CONCATENAR COLUMNAS
 ****************************************************************************"""
@@ -68,17 +69,25 @@ CALCULAR EDAD DEL PACIENTE AÑOS MESES Y DIAS
 from datetime import datetime
 
 def calcular_edad(fecha_nac, fecha_atencion):
+    # Convertir las fechas a objetos datetime
     fecha_nac = datetime.strptime(fecha_nac, '%d/%m/%Y')
     fecha_atencion = datetime.strptime(fecha_atencion, '%d/%m/%Y %H:%M')
     
+    # Calcular años, meses y días
     años = fecha_atencion.year - fecha_nac.year
     meses = fecha_atencion.month - fecha_nac.month
     días = fecha_atencion.day - fecha_nac.day
 
+    # Ajustar si los días son negativos
     if días < 0:
         meses -= 1
-        días += (fecha_atencion.replace(month=fecha_atencion.month) - fecha_nac.replace(month=fecha_nac.month, day=1)).days
+        # Obtener los días del mes anterior
+        mes_anterior = (fecha_atencion.month - 1) or 12
+        año_anterior = fecha_atencion.year if fecha_atencion.month > 1 else fecha_atencion.year - 1
+        dias_mes_anterior = (datetime(año_anterior, mes_anterior + 1, 1) - datetime(año_anterior, mes_anterior, 1)).days
+        días += dias_mes_anterior
 
+    # Ajustar si los meses son negativos
     if meses < 0:
         meses += 12
         años -= 1
