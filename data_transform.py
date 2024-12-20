@@ -213,6 +213,20 @@ col_personal = ['?FUA', 'Fecha Atencion', 'EESS', 'Beneficiario', 'Num. Doc.',
                 'Fecha Probable Parto', 'Fecha Parto']
 df_personalizada = df_resultante[col_personal]
 """****************************************************************************
+ORDENAR DATAFRAME
+****************************************************************************"""
+# Crear el DataFrame
+df = pd.DataFrame(df_personalizada)
+
+# Definir la función para ordenar el DataFrame
+def ordenar_dataframe(df):
+    # Ordenar primero por 'Nombre de Empresa' y luego por 'Nombre del Dueño'
+    df_ordenado = df.sort_values(by=['EESS', 'Beneficiario'], ascending=True)
+    return df_ordenado
+
+# Llamar a la función y ordenar el DataFrame
+df_ordenado_final = ordenar_dataframe(df)
+"""****************************************************************************
 GUARDAR EL DATAFRAME EN FORMATO CSV
 ****************************************************************************"""
 # Guardar el DataFrame en un archivo CSV 
@@ -224,7 +238,7 @@ def guardar_como_csv(dataframe, archivo_salida):
         print(f"Se produjo un error al guardar el archivo: {e}")
 
 # Uso de la función
-dataframe = pd.DataFrame(df_personalizada)
+dataframe = pd.DataFrame(df_ordenado_final)
 
 # Guardar el DataFrame como un nuevo archivo CSV
 if dataframe is not None:
