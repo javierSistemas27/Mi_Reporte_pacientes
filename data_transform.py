@@ -84,7 +84,7 @@ def calcular_edad(fecha_nac, fecha_atencion):
         # Obtener los días del mes anterior
         mes_anterior = (fecha_atencion.month - 1) or 12
         año_anterior = fecha_atencion.year if fecha_atencion.month > 1 else fecha_atencion.year - 1
-        dias_mes_anterior = (datetime(año_anterior, mes_anterior + 1, 1) - datetime(año_anterior, mes_anterior, 1)).days
+        dias_mes_anterior = (datetime(año_anterior, mes_anterior, 1) - datetime(año_anterior, mes_anterior - 1, 1)).days
         días += dias_mes_anterior
 
     # Ajustar si los meses son negativos
