@@ -154,14 +154,17 @@ df = pd.DataFrame(df_col_delete_final)
 creadores = {
     70038401: 'JAVIER',
     75101750: 'DANITZA',
-    70609648: 'MAYRA'
+    42354614: 'RICHARD'
 }
+
 # Definir una función para mapear los identificadores a los nombres de los creadores
 def agregar_nombre_creador(row):
     return creadores.get(row['Digitador'], 'Desconocido')  # Devuelve 'Desconocido' si no encuentra el ID
-# Agregar una nueva columna 'Creador' al DataFrame
+
+# Agregar una nueva columna 'Nombre_D' al DataFrame
 df['Nombre_D'] = df.apply(agregar_nombre_creador, axis=1)
-# Reordenar las columnas para colocar 'Creador' después de 'Registro'
+
+# Reordenar las columnas para colocar 'Nombre_D' después de 'Digitador'
 columnas = df.columns.tolist()
 idx = columnas.index('Digitador') + 1
 columnas.insert(idx, columnas.pop(columnas.index('Nombre_D')))
