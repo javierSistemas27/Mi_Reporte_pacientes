@@ -1,6 +1,7 @@
 import pandas as pd
 from openpyxl import Workbook
 from openpyxl.styles import PatternFill, Font, Alignment, Border, Side
+from openpyxl.utils import get_column_letter
 from openpyxl.utils.dataframe import dataframe_to_rows
 from datetime import datetime
 
@@ -66,6 +67,10 @@ try:
         for col_num, value in enumerate(row, start=1):
             cell = ws.cell(row=row_num, column=col_num, value=value)
 
+            # Aplicar estilo especial solo a la columna "FUA"
+            if data.columns[col_num - 1] == "?FUA":
+                cell.font = Font(bold=True, size=16)
+
             # Pintar de color naranja las filas con ID Servicio 9 o 10
             if data.iloc[row_num - fila_inicio_tabla - 1]["ID Servicio"] in [9, 10]:
                 cell.fill = PatternFill(start_color="FFA500", end_color="FFA500", fill_type="solid")
@@ -83,19 +88,30 @@ try:
             cell.alignment = Alignment(horizontal="center", vertical="center")
 
     # Ajustar el ancho de las columnas automáticamente
-    for column in ws.columns:
+    for column_cells in ws.columns:
         max_length = 0
-        column_letter = column[0].column_letter  # Letra de la columna
-        for cell in column:
+        column_letter = get_column_letter(column_cells[0].column)
+        
+        for cell in column_cells:
             try:
-                if cell.value:  # Calcular la longitud máxima del contenido
-                    max_length = max(max_length, len(str(cell.value)))
+                if cell.value:
+                    # Longitud base
+                    cell_length = len(str(cell.value))
+
+                    # Ajustar por tamaño de fuente
+                    font_size = cell.font.size if cell.font and cell.font.size else 11
+                    # Estimación: cada punto de fuente extra aumenta el ancho en un 5% aprox.
+                    adjusted_length = cell_length * (font_size / 11)
+
+                    max_length = max(max_length, adjusted_length)
             except:
                 pass
-        ws.column_dimensions[column_letter].width = max_length + 2
+
+        # Agrega margen para no cortar los textos
+        ws.column_dimensions[column_letter].width = max_length + 4
 
     # Guardar el archivo Excel
-    archivo_excel = 'atenciones_estilizadas_con_encabezado.xlsx'
+    archivo_excel = 'Cruce_Info_Gestante.xlsx'
     wb.save(archivo_excel)
     print(f"Datos exportados exitosamente a {archivo_excel} con encabezado, bordes y estilos.")
 
